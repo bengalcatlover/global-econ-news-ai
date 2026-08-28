@@ -24,9 +24,10 @@ _client = None
 
 def _get_client():
     global _client
-    from config import OPENAI_API_KEY
-    if _client is None or _client.api_key != OPENAI_API_KEY:
-        _client = openai.OpenAI(api_key=OPENAI_API_KEY)
+    import config
+    key = config.OPENAI_API_KEY
+    if _client is None or _client.api_key != key:
+        _client = openai.OpenAI(api_key=key)
     return _client
 
 # 信頼性の高いメディアリスト（ベトナム経済特化、Bランク判定に使用）

@@ -22,16 +22,17 @@ from pathlib import Path
 import openai
 from jinja2 import Environment, FileSystemLoader
 
-from config import OPENAI_API_KEY, ARTICLE_CONFIG, INFOBANK_CATEGORIES, OUTPUT_DIR
+import config
+from config import ARTICLE_CONFIG, INFOBANK_CATEGORIES, OUTPUT_DIR
 
 # OpenAIクライアント（遅延初期化）
 _client = None
 
 def _get_client():
     global _client
-    from config import OPENAI_API_KEY
-    if _client is None or _client.api_key != OPENAI_API_KEY:
-        _client = openai.OpenAI(api_key=OPENAI_API_KEY)
+    key = config.OPENAI_API_KEY
+    if _client is None or _client.api_key != key:
+        _client = openai.OpenAI(api_key=key)
     return _client
 
 # Jinja2 テンプレートエンジンを初期化（templates/ ディレクトリを参照）
