@@ -19,23 +19,17 @@ st.set_page_config(
 st.title("📰 ベトナム経済ニュース AI パイプライン")
 st.markdown("**情報収集 → ファクトチェック → 記事ドラフト生成** をワンクリックで実行")
 
-# APIキー設定（サイドバーで入力 or 環境変数から取得）
+# APIキー設定（Streamlit Secrets から取得、クライアントには非表示）
 import os
-_default_key = os.getenv("OPENAI_API_KEY", "")
-if not _default_key:
-    try:
-        _default_key = st.secrets.get("OPENAI_API_KEY", "")
-    except Exception:
-        pass
+try:
+    _api_key = st.secrets["OPENAI_API_KEY"]
+    os.environ["OPENAI_API_KEY"] = _api_key
+    import config
+    config.OPENAI_API_KEY = _api_key
+except Exception:
+    pass
 
 with st.sidebar:
-    api_key = st.text_input("OpenAI API Key", value=_default_key, type="password")
-    if api_key:
-        os.environ["OPENAI_API_KEY"] = api_key
-        import config
-        config.OPENAI_API_KEY = api_key
-
-    st.divider()
     st.header("設定")
     hours = st.slider("収集対象（過去N時間）", 6, 72, 24)
     max_articles = st.slider("記事ドラフト生成数", 1, 5, 2)
@@ -54,8 +48,8 @@ with st.sidebar:
 # メイン処理
 if st.button("▶ パイプラインを実行", type="primary", use_container_width=True):
 
-    if not api_key:
-        st.error("サイドバーの「OpenAI API Key」にキーを入力してください")
+    if not os.getenv("OPENAI_API_KEY"):
+        st.error("システム設定エラー: APIキーが設定されていません")
         st.stop()
 
     # ────────────────────────────────────
