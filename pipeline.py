@@ -5,9 +5,16 @@
 """
 
 import argparse
+import io
 import json
+import sys
 import time
 from datetime import datetime
+
+# Windows cp932環境でベトナム語等の非ASCII文字を出力するため、stdoutをUTF-8に強制
+if sys.stdout.encoding != "utf-8":
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
 from config import ARTICLE_CONFIG, OUTPUT_DIR
 from collector import collect_news, save_to_json, load_from_json
@@ -154,7 +161,7 @@ def _prepare_for_drafts(clusters, report):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="海外経済ニュース AI パイプライン — 収集・ファクトチェック・記事生成"
+        description="海外経済ニュース AI パイプライン - 収集・ファクトチェック・記事生成"
     )
     parser.add_argument(
         "--hours", type=int, default=24,

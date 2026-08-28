@@ -16,13 +16,14 @@ RSS_FEEDS = {
     # ベトナム国内メディア（英語版）
     "VnExpress International": "https://e.vnexpress.net/rss/news.rss",
     "VnExpress Business": "https://e.vnexpress.net/rss/business.rss",
-    "Vietnam News": "https://vietnamnews.vn/rss/economy.rss",
-    "VietnamNet Business": "https://vietnamnet.vn/en/rss/business.rss",
-    "Tuoi Tre News": "https://tuoitrenews.vn/rss/business.rss",
-    # 国際メディアのベトナム関連
-    "Reuters Vietnam": "https://www.reuters.com/places/vietnam/rss",
-    "Nikkei Asia Vietnam": "https://asia.nikkei.com/rss/feed/vietnam",
-    "BBC Vietnam": "http://feeds.bbci.co.uk/vietnamese/rss.xml",
+    "VnExpress Perspectives": "https://e.vnexpress.net/rss/perspectives.rss",
+    "Vietnam News Economy": "https://vietnamnews.vn/rss/economy.rss",
+    "Vietnam News Business": "https://vietnamnews.vn/rss/business.rss",
+    "Vietnam News Politics": "https://vietnamnews.vn/rss/politics.rss",
+    "Vietnam Insider": "https://vietnaminsider.vn/feed/",
+    "Saigon Times": "https://english.thesaigontimes.vn/rss/home.rss",
+    # 国際メディア（ベトナム関連）
+    "BBC Vietnamese": "http://feeds.bbci.co.uk/vietnamese/rss.xml",
 }
 
 # ──────────────────────────────────────────────

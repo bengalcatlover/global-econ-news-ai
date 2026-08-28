@@ -1,5 +1,5 @@
 """
-factchecker.py — ファクトチェックモジュール
+factchecker.py - ファクトチェックモジュール
 InfoBank（ベトナム経済メディア）向け。
 「ファクトチェックに時間がかかる」課題を解決する中核モジュール。
 複数ソース突合・数値整合性チェック・信頼度スコアリングを自動化する。
@@ -26,12 +26,13 @@ client = openai.OpenAI(api_key=OPENAI_API_KEY)
 HIGH_CREDIBILITY_SOURCES = {
     "VnExpress International",
     "VnExpress Business",
-    "Vietnam News",
-    "VietnamNet Business",
-    "Tuoi Tre News",
-    "Reuters Vietnam",
-    "Nikkei Asia Vietnam",
-    "BBC Vietnam",
+    "VnExpress Perspectives",
+    "Vietnam News Economy",
+    "Vietnam News Business",
+    "Vietnam News Politics",
+    "Vietnam Insider",
+    "Saigon Times",
+    "BBC Vietnamese",
 }
 
 # 数値系キーワード（ベトナム経済指標の抽出対象）
@@ -643,7 +644,7 @@ def report_to_text(report: dict) -> str:
     meta = report["meta"]
 
     lines.append("=" * 60)
-    lines.append(f"ファクトチェックレポート — {meta['topic']}")
+    lines.append(f"ファクトチェックレポート - {meta['topic']}")
     lines.append(f"生成日時: {meta['generated_at']} (UTC)")
     lines.append("=" * 60)
 
@@ -751,7 +752,7 @@ def run_factcheck(articles: list[dict], save: bool = True) -> tuple[dict, list[d
         (report辞書, スコアリング済みクラスターリスト)
     """
     print("\n" + "=" * 60)
-    print("ファクトチェック開始 — InfoBank ベトナム経済版")
+    print("ファクトチェック開始 - InfoBank ベトナム経済版")
     print(f"対象記事数: {len(articles)}件")
     print("=" * 60 + "\n")
 
