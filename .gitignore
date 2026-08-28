@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 .env
 .DS_Store
+.streamlit/secrets.toml
 
 design_review_prompt.txt
 gpt_review_result.txt

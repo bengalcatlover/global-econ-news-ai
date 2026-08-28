@@ -6,8 +6,18 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# OpenAI API Key
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+# OpenAI API Key（環境変数 or Streamlit Secrets から取得）
+def _get_api_key():
+    key = os.getenv("OPENAI_API_KEY", "")
+    if not key:
+        try:
+            import streamlit as st
+            key = st.secrets.get("OPENAI_API_KEY", "")
+        except Exception:
+            pass
+    return key
+
+OPENAI_API_KEY = _get_api_key()
 
 # ──────────────────────────────────────────────
 # 収集対象ソース（ベトナム経済ニュース）
