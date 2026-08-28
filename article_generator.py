@@ -24,8 +24,15 @@ from jinja2 import Environment, FileSystemLoader
 
 from config import OPENAI_API_KEY, ARTICLE_CONFIG, INFOBANK_CATEGORIES, OUTPUT_DIR
 
-# OpenAI クライアントを初期化
-client = openai.OpenAI(api_key=OPENAI_API_KEY)
+# OpenAIクライアント（遅延初期化）
+_client = None
+
+def _get_client():
+    global _client
+    from config import OPENAI_API_KEY
+    if _client is None or _client.api_key != OPENAI_API_KEY:
+        _client = openai.OpenAI(api_key=OPENAI_API_KEY)
+    return _client
 
 # Jinja2 テンプレートエンジンを初期化（templates/ ディレクトリを参照）
 _TEMPLATES_DIR = os.path.join(os.path.dirname(__file__), "templates")
@@ -86,7 +93,7 @@ InfoBankのタイトルルール：
 
 タイトルのみを1行ずつ番号付きで出力してください。"""
 
-    response = client.chat.completions.create(
+    response = _get_client().chat.completions.create(
         model=ARTICLE_CONFIG["model"],
         messages=[{"role": "user", "content": prompt}],
         temperature=0.7,
@@ -168,7 +175,7 @@ def generate_body_draft(article_data: dict) -> str:
 - 見出し・タイトルは含めない（本文のみ）
 - 背景・文脈も含めてベトナム経済全体の中での位置づけを説明する"""
 
-    response = client.chat.completions.create(
+    response = _get_client().chat.completions.create(
         model=ARTICLE_CONFIG["model"],
         messages=[{"role": "user", "content": prompt}],
         temperature=0.4,   # 低めにして事実の歪みを抑える
@@ -221,7 +228,7 @@ def extract_editor_checkpoints(article_data: dict, body_draft: str) -> list[str]
 - 1行ずつ、具体的に（「〜の数値を確認してください」など）
 - 「問題なし」の場合は「特筆すべき確認事項はありません」と1行だけ出力"""
 
-    response = client.chat.completions.create(
+    response = _get_client().chat.completions.create(
         model=ARTICLE_CONFIG["model"],
         messages=[{"role": "user", "content": prompt}],
         temperature=0.3,
@@ -352,7 +359,7 @@ def suggest_category(article_data: dict) -> dict:
   "alternatives": ["次点のカテゴリキー1", "次点のカテゴリキー2"]
 }}"""
 
-    response = client.chat.completions.create(
+    response = _get_client().chat.completions.create(
         model=ARTICLE_CONFIG["model"],
         messages=[{"role": "user", "content": prompt}],
         temperature=0.2,   # カテゴリ判定は揺らぎを最小化

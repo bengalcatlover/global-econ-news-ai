@@ -19,8 +19,15 @@ from config import OPENAI_API_KEY, ARTICLE_CONFIG, OUTPUT_DIR
 # 定数定義
 # ──────────────────────────────────────────────
 
-# OpenAIクライアント初期化
-client = openai.OpenAI(api_key=OPENAI_API_KEY)
+# OpenAIクライアント（遅延初期化）
+_client = None
+
+def _get_client():
+    global _client
+    from config import OPENAI_API_KEY
+    if _client is None or _client.api_key != OPENAI_API_KEY:
+        _client = openai.OpenAI(api_key=OPENAI_API_KEY)
+    return _client
 
 # 信頼性の高いメディアリスト（ベトナム経済特化、Bランク判定に使用）
 HIGH_CREDIBILITY_SOURCES = {
@@ -318,7 +325,7 @@ def extract_numeric_claims(article: dict) -> list[dict]:
 """ + text
 
     try:
-        response = client.chat.completions.create(
+        response = _get_client().chat.completions.create(
             model=ARTICLE_CONFIG["model"],
             messages=[{"role": "user", "content": prompt}],
             temperature=0,
@@ -405,7 +412,7 @@ def _detect_inconsistencies(claims: list[dict], topic_title: str) -> list[dict]:
 """
 
     try:
-        response = client.chat.completions.create(
+        response = _get_client().chat.completions.create(
             model=ARTICLE_CONFIG["model"],
             messages=[{"role": "user", "content": prompt}],
             temperature=0,
